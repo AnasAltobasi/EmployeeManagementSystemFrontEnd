@@ -1,1 +1,82 @@
-<p>employee-form works!</p>
+<div class="page-wrapper">
+  <div class="header-row">
+    <div>
+      <h1 class="page-title">{{ isEditMode ? 'Edit' : 'Add' }} Employee</h1>
+      <p class="page-subtitle">{{ isEditMode ? 'Update the details below' : 'Fill in the details below' }}</p>
+    </div>
+    <button mat-stroked-button routerLink="/">
+      <mat-icon>arrow_back</mat-icon> Back
+    </button>
+  </div>
+
+  <mat-card>
+    <mat-card-content>
+      <form [formGroup]="employeeForm" (ngSubmit)="onSubmit()" class="employee-form">
+
+        <div class="photo-section">
+          <div class="avatar-preview" (click)="fileInput.click()">
+            <img *ngIf="photoPreview; else avatarPlaceholder" [src]="photoPreview" alt="Preview" class="avatar-preview-img">
+            <ng-template #avatarPlaceholder>
+              <mat-icon class="avatar-placeholder-icon">person</mat-icon>
+            </ng-template>
+            <div class="avatar-overlay">
+              <mat-icon>photo_camera</mat-icon>
+            </div>
+          </div>
+          <div class="photo-info">
+            <span class="photo-label">Profile Photo</span>
+            <span class="photo-hint">Click the avatar to upload a photo</span>
+            <span *ngIf="uploadError" class="photo-error">{{ uploadError }}</span>
+          </div>
+          <input #fileInput type="file" accept="image/*" (change)="onFileSelected($event)" hidden>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Full Name</mat-label>
+            <input matInput formControlName="name" placeholder="Enter full name">
+            <mat-icon matPrefix>person_outline</mat-icon>
+            <mat-error *ngIf="employeeForm.get('name')?.hasError('required')">Name is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Email Address</mat-label>
+            <input matInput formControlName="email" type="email" placeholder="example@mail.com">
+            <mat-icon matPrefix>mail_outline</mat-icon>
+            <mat-error *ngIf="employeeForm.get('email')?.hasError('required')">Email is required</mat-error>
+            <mat-error *ngIf="employeeForm.get('email')?.hasError('email')">Invalid email format</mat-error>
+          </mat-form-field>
+        </div>
+
+        <div class="form-row">
+          <mat-form-field appearance="outline">
+            <mat-label>Mobile Number</mat-label>
+            <input matInput formControlName="mobileNumber" placeholder="+1 234 567 890">
+            <mat-icon matPrefix>phone_outline</mat-icon>
+            <mat-error *ngIf="employeeForm.get('mobileNumber')?.hasError('required')">Mobile number is required</mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
+            <mat-label>Home Address</mat-label>
+            <input matInput formControlName="homeAddress" placeholder="Street, City, Zip Code">
+            <mat-icon matPrefix>home_outline</mat-icon>
+            <mat-error *ngIf="employeeForm.get('homeAddress')?.hasError('required')">Address is required</mat-error>
+          </mat-form-field>
+        </div>
+
+        <mat-divider></mat-divider>
+
+        <div class="form-actions">
+          <button mat-button type="button" routerLink="/">Cancel</button>
+          <button mat-flat-button color="primary" type="submit" [disabled]="employeeForm.invalid || isUploading">
+            <mat-spinner *ngIf="isUploading" diameter="18" style="display:inline-block; margin-right:8px"></mat-spinner>
+            {{ isUploading ? 'Uploading...' : (isEditMode ? 'Update Employee' : 'Save Employee') }}
+          </button>
+        </div>
+
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

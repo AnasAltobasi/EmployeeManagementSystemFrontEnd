@@ -4,6 +4,7 @@ import { SharedMaterialModule } from '../../shared/material.module';
 import { Employee, EmployeeService } from '../../services/employee.service';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-employee-list',
@@ -54,16 +55,42 @@ export class EmployeeListComponent implements OnInit {
   }
 
   deleteEmployee(id: string): void {
-    if (confirm('Are you sure you want to delete this employee?')) {
+  Swal.fire({
+    title: 'Delete Employee?',
+    text: 'This action cannot be undone.',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonColor: '#f44336',
+    cancelButtonColor: '#9e9e9e',
+    confirmButtonText: 'Yes, delete',
+    cancelButtonText: 'Cancel',
+  }).then((result) => {
+    if (result.isConfirmed) {
       this.employeeService.deleteEmployee(id).subscribe({
         next: () => {
-          this.showNotification('Employee deleted successfully', 'success');
+          Swal.fire({
+            title: 'Deleted!',
+            text: 'Employee has been deleted.',
+            icon: 'success',
+            confirmButtonColor: '#3f51b5',
+            timer: 2000,
+            timerProgressBar: true,
+            showConfirmButton: false,
+          });
           this.loadEmployees();
         },
-        error: () => this.showNotification('Delete failed', 'error')
+        error: () => {
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to delete employee. Please try again.',
+            icon: 'error',
+            confirmButtonColor: '#3f51b5',
+          });
+        }
       });
     }
-  }
+  });
+}
 
   private showNotification(message: string, type: 'success' | 'error'): void {
     this.snackBar.open(message, 'Close', {
@@ -71,4 +98,8 @@ export class EmployeeListComponent implements OnInit {
       panelClass: type === 'success' ? ['bg-success'] : ['bg-danger']
     });
   }
+
+  isValidUrl(url: string): boolean {
+  return !!url && (url.startsWith('http://') || url.startsWith('https://'));
+}
 }

@@ -1,43 +1,66 @@
-<div class="container mat-elevation-z8">
-  <mat-toolbar color="primary">
-    <span>Employee Management System</span>
-    <span class="spacer"></span>
-    <button mat-raised-button color="accent" routerLink="/add">Add Employee</button>
-  </mat-toolbar>
+<div class="page-wrapper">
+  <div class="header-row">
+    <div>
+      <h1 class="page-title">Employees</h1>
+      <p class="page-subtitle">{{ totalRecords }} total records</p>
+    </div>
+    <button mat-flat-button color="primary" routerLink="/add">
+      <mat-icon>add</mat-icon> Add Employee
+    </button>
+  </div>
 
-  <table mat-table [dataSource]="employees">
-    <ng-container matColumnDef="name">
-      <th mat-header-cell *matHeaderCellDef> Name </th>
-      <td mat-cell *matCellDef="let element"> {{element.name}} </td>
-    </ng-container>
+  <mat-card>
+    <table mat-table [dataSource]="employees" class="full-width">
 
-    <ng-container matColumnDef="email">
-      <th mat-header-cell *matHeaderCellDef> Email </th>
-      <td mat-cell *matCellDef="let element"> {{element.email}} </td>
-    </ng-container>
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>Name</th>
+        <td mat-cell *matCellDef="let element">
+          <div class="name-cell">
+            <ng-container>
+              <img
+                [src]="element.photo"
+                [alt]="element.name"
+                class="avatar-img"
+                (error)="element.photo = null">
+            </ng-container>
+            <ng-template>
+              <span class="avatar">{{ element.name.charAt(0).toUpperCase() }}</span>
+            </ng-template>
+            {{ element.name }}
+          </div>
+        </td>
+      </ng-container>
 
-    <ng-container matColumnDef="mobileNumber">
-      <th mat-header-cell *matHeaderCellDef> Mobile Number </th>
-      <td mat-cell *matCellDef="let element"> {{element.mobileNumber}} </td>
-    </ng-container>
+      <ng-container matColumnDef="email">
+        <th mat-header-cell *matHeaderCellDef>Email</th>
+        <td mat-cell *matCellDef="let element">{{ element.email }}</td>
+      </ng-container>
 
-    <ng-container matColumnDef="actions">
-      <th mat-header-cell *matHeaderCellDef> Actions </th>
-      <td mat-cell *matCellDef="let element">
-        <button mat-icon-button color="primary" [routerLink]="['/edit', element.employeeId]">
-          <mat-icon>edit</mat-icon>
-        </button>
-        <button mat-icon-button color="warn" (click)="deleteEmployee(element.employeeId)">
-          <mat-icon>delete</mat-icon>
-        </button>
-      </td>
-    </ng-container>
+      <ng-container matColumnDef="mobileNumber">
+        <th mat-header-cell *matHeaderCellDef>Mobile</th>
+        <td mat-cell *matCellDef="let element">{{ element.mobileNumber }}</td>
+      </ng-container>
 
-    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-  </table>
+      <ng-container matColumnDef="actions">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let element" class="actions-cell">
+          <button mat-icon-button color="primary" [routerLink]="['/edit', element.employeeId]" matTooltip="Edit">
+            <mat-icon>edit</mat-icon>
+          </button>
+          <button mat-icon-button color="warn" (click)="deleteEmployee(element.employeeId)" matTooltip="Delete">
+            <mat-icon>delete_outline</mat-icon>
+          </button>
+        </td>
+      </ng-container>
 
-  <mat-paginator [length]="totalRecords" [pageSize]="pageSize"
-                 [pageSizeOptions]="[5, 10, 20]" (page)="onPageChange($event)">
-  </mat-paginator>
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <mat-divider></mat-divider>
+
+    <mat-paginator [length]="totalRecords" [pageSize]="pageSize" [pageSizeOptions]="[5, 10, 20]"
+      (page)="onPageChange($event)" showFirstLastButtons>
+    </mat-paginator>
+  </mat-card>
 </div>

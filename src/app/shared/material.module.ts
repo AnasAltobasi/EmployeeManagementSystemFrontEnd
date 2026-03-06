@@ -7,7 +7,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-
+import { MatCardModule } from '@angular/material/card';
+import { MatDividerModule } from '@angular/material/divider';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 const MaterialComponents = [
   MatTableModule,
   MatPaginatorModule,
@@ -16,7 +19,11 @@ const MaterialComponents = [
   MatIconModule,
   MatSnackBarModule,
   MatFormFieldModule,
-  MatInputModule
+  MatInputModule,
+  MatCardModule,
+  MatDividerModule,
+  MatTooltipModule,
+  MatProgressSpinnerModule
 ];
 
 @NgModule({
